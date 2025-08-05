@@ -1,0 +1,42 @@
+# PHiPe
+Lightweight data processing pipelines.
+
+## Features
+This package is currently worked on. The following features are planned:
+
+- Up to date README with examples.
+- Comprehensive tests.
+- Comments in source code.
+
+More pipeline operations are going to be added including, but not limited to:
+
+**Intermediate Operations**:
+- skip
+- takeWhile
+- dropWhile
+- rekey
+- keys
+- values
+- distinct
+- sorted
+
+**Terminal Operations**:
+- count
+- min
+- max
+- sum
+- average
+- join
+- groupBy
+
+**Short-Circuiting Terminal Operations**:
+- findFirst
+- anyMatch
+- allMatch
+- noneMatch
+
+**Branching/Combining Operations**:
+- tee
+- merge
+- append
+- zip

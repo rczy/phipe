@@ -1,0 +1,21 @@
+{
+    "name": "rczy/phipe",
+    "description": "PHiPe: Lightweight data processing pipelines",
+    "type": "library",
+    "license": "MIT",
+    "version": "0.1",
+    "autoload": {
+        "psr-4": {
+            "Rczy\\Phipe\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Bérczy Bálint"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require-dev": {
+        "phpunit/phpunit": "^12.2"
+    }
+}
