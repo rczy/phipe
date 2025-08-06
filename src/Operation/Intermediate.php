@@ -114,6 +114,20 @@ trait Intermediate
         return new self($generator());
     }
 
+    public function distinct(?callable $fieldMapper = null): self
+    {
+        $generator = function () use ($fieldMapper): Generator {
+            $visited = [];
+            foreach ($this->source as $key => $item) {
+                $current = $fieldMapper ? $fieldMapper($item) : $item;
+                if (in_array($current, $visited)) continue;
+                $visited[] = $current;
+                yield $key => $item;
+            }
+        };
+        return new self($generator());
+    }
+
     public function transform(callable $transformer): self
     {
         return $transformer(new self($this->source));

@@ -11,7 +11,6 @@ This package is currently worked on. The following features are planned:
 More pipeline operations are going to be added including, but not limited to:
 
 **Intermediate Operations**:
-- distinct
 - sorted
 
 **Terminal Operations**:
