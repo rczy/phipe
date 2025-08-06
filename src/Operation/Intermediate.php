@@ -43,7 +43,7 @@ trait Intermediate
         $generator = function () use ($limit): Generator {
             $count = 0;
             foreach ($this->source as $key => $item) {
-                if ($count++ > $limit) break;
+                if (++$count > $limit) break;
                 yield $key => $item;
             }
         };
@@ -126,6 +126,26 @@ trait Intermediate
             }
         };
         return new self($generator());
+    }
+
+    public function sort(callable $comparator): self
+    {
+        $sorted = [];
+        foreach ($this->source as $key => $item) {
+            $sorted[$key] = $item;
+        }
+        usort($sorted, $comparator);
+        return new self($sorted);
+    }
+
+    public function asc(): self
+    {
+        return $this->sort(fn ($a, $b) => $a <=> $b);
+    }
+
+    public function desc(): self
+    {
+        return $this->sort(fn ($a, $b) => -($a <=> $b));
     }
 
     public function transform(callable $transformer): self
