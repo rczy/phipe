@@ -91,6 +91,36 @@ trait Intermediate
         return new self($generator());
     }
 
+    public function rekey(callable $keyMapper): self
+    {
+        $generator = function () use ($keyMapper): Generator {
+            foreach ($this->source as $key => $item) {
+                yield $keyMapper($key) => $item;
+            }
+        };
+        return new self($generator());
+    }
+
+    public function keys(): self
+    {
+        $generator = function (): Generator {
+            foreach ($this->source as $key => $_) {
+                yield $key;
+            }
+        };
+        return new self($generator());
+    }
+
+    public function values(): self
+    {
+        $generator = function (): Generator {
+            foreach ($this->source as $item) {
+                yield $item;
+            }
+        };
+        return new self($generator());
+    }
+
     public function transform(callable $transformer): self
     {
         return $transformer(new self($this->source));
