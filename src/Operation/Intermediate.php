@@ -7,9 +7,8 @@ trait Intermediate
 {
     public function map(callable $mapper): self
     {
-        $source = $this->source;
-        $generator = function () use ($source, $mapper): Generator {
-            foreach ($source as $key => $item) {
+        $generator = function () use ($mapper): Generator {
+            foreach ($this->source as $key => $item) {
                 yield $key => $mapper($item);
             }
         };
@@ -18,9 +17,8 @@ trait Intermediate
 
     public function filter(callable $predicate): self
     {
-        $source = $this->source;
-        $generator = function () use ($source, $predicate): Generator {
-            foreach ($source as $key => $item) {
+        $generator = function () use ($predicate): Generator {
+            foreach ($this->source as $key => $item) {
                 if ($predicate($item)) {
                     yield $key => $item;
                 }
@@ -31,9 +29,8 @@ trait Intermediate
 
     public function peek(callable $action): self
     {
-        $source = $this->source;
-        $generator = function () use ($source, $action): Generator {
-            foreach ($source as $key => $item) {
+        $generator = function () use ($action): Generator {
+            foreach ($this->source as $key => $item) {
                 $action($item);
                 yield $key => $item;
             }
@@ -43,10 +40,9 @@ trait Intermediate
 
     public function limit(int $limit): self
     {
-        $source = $this->source;
-        $generator = function () use ($source, $limit): Generator {
+        $generator = function () use ($limit): Generator {
             $count = 0;
-            foreach ($source as $key => $item) {
+            foreach ($this->source as $key => $item) {
                 if ($count++ > $limit) break;
                 yield $key => $item;
             }
@@ -56,10 +52,9 @@ trait Intermediate
 
     public function skip(int $skip): self
     {
-        $source = $this->source;
-        $generator = function () use ($source, $skip): Generator {
+        $generator = function () use ($skip): Generator {
             if ($skip < 0) $skip = 0;
-            foreach ($source as $key => $item) {
+            foreach ($this->source as $key => $item) {
                 if ($skip-- > 0) continue;
                 yield $key => $item;
             }
@@ -69,9 +64,8 @@ trait Intermediate
 
     public function takeWhile(callable $predicate): self
     {
-        $source = $this->source;
-        $generator = function () use ($source, $predicate): Generator {
-            foreach ($source as $key => $item) {
+        $generator = function () use ($predicate): Generator {
+            foreach ($this->source as $key => $item) {
                 if (!$predicate($item)) break;
                 yield $key => $item;
             }
@@ -81,9 +75,8 @@ trait Intermediate
 
     public function dropWhile(callable $predicate): self
     {
-        $source = $this->source;
-        $generator = function () use ($source, $predicate): Generator {
-            foreach ($source as $key => $item) {
+        $generator = function () use ($predicate): Generator {
+            foreach ($this->source as $key => $item) {
                 if ($predicate($item)) continue;
                 yield $key => $item;
             }
