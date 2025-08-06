@@ -29,6 +29,18 @@ trait Intermediate
         return new self($generator());
     }
 
+    public function peek(callable $action): self
+    {
+        $source = $this->source;
+        $generator = function () use ($source, $action): Generator {
+            foreach ($source as $key => $item) {
+                $action($item);
+                yield $key => $item;
+            }
+        };
+        return new self($generator());
+    }
+
     public function limit(int $limit): self
     {
         $source = $this->source;
@@ -42,12 +54,37 @@ trait Intermediate
         return new self($generator());
     }
 
-    public function peek(callable $action): self
+    public function skip(int $skip): self
     {
         $source = $this->source;
-        $generator = function () use ($source, $action): Generator {
+        $generator = function () use ($source, $skip): Generator {
+            if ($skip < 0) $skip = 0;
             foreach ($source as $key => $item) {
-                $action($item);
+                if ($skip-- > 0) continue;
+                yield $key => $item;
+            }
+        };
+        return new self($generator());
+    }
+
+    public function takeWhile(callable $predicate): self
+    {
+        $source = $this->source;
+        $generator = function () use ($source, $predicate): Generator {
+            foreach ($source as $key => $item) {
+                if (!$predicate($item)) break;
+                yield $key => $item;
+            }
+        };
+        return new self($generator());
+    }
+
+    public function dropWhile(callable $predicate): self
+    {
+        $source = $this->source;
+        $generator = function () use ($source, $predicate): Generator {
+            foreach ($source as $key => $item) {
+                if ($predicate($item)) continue;
                 yield $key => $item;
             }
         };
