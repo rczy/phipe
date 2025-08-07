@@ -265,6 +265,44 @@ trait Intermediate
     }
 
     /**
+     * Reverses the order of the items after consuming the source.
+     * Intermediate, eager operation.
+     * 
+     * @return Phipe
+     */
+    public function reverse(): self
+    {
+        $consumed = [];
+        foreach ($this->source as $key => $item) {
+            $consumed[$key] = $item;
+        }
+        $generator = function () use ($consumed): Generator {
+            yield from array_reverse($consumed, true);
+        };
+        return new self($generator());
+    }
+
+    /**
+     * Shuffles the order of the items after consuming the source.
+     * Caution: does not preserve keys.
+     * Intermediate, eager operation.
+     * 
+     * @return Phipe
+     */
+    public function shuffle(): self
+    {
+        $consumed = [];
+        foreach ($this->source as $key => $item) {
+            $consumed[$key] = $item;
+        }
+        \shuffle($consumed);
+        $generator = function () use ($consumed): Generator {
+            yield from $consumed;
+        };
+        return new self($generator());
+    }
+
+    /**
      * Applies a predefined series of pipeline operations to the current pipeline.
      * This is useful for reusing a set of operations on different sources.
      * Intermediate operation.
