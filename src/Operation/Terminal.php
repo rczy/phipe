@@ -3,6 +3,17 @@ namespace Rczy\Phipe\Operation;
 
 trait Terminal
 {
+    /**
+     * Applies the reducer function iteratively on all the items of
+     * the source while consuming it, to produce a single value.
+     * Terminal operation.
+     * 
+     * reducer: fn ($accumulator, $item, $key)
+     * 
+     * @param mixed $initialValue
+     * @param callable $reducer
+     * @return mixed
+     */
     public function reduce(mixed $initialValue, callable $reducer): mixed
     {
         $accumulator = $initialValue;
@@ -12,6 +23,12 @@ trait Terminal
         return $accumulator;
     }
 
+    /**
+     * Consumes the pipeline and build an array of it's items.
+     * Terminal operation.
+     * 
+     * @return array
+     */
     public function toArray(): array
     {
         $result = [];
@@ -21,6 +38,15 @@ trait Terminal
         return $result;
     }
 
+    /**
+     * Consumes the pipeline and applies a consumer function on all items.
+     * Terminal operation.
+     * 
+     * consumer: fn ($item, $key)
+     * 
+     * @param callable $consumer
+     * @return void
+     */
     public function forEach(callable $consumer): void
     {
         foreach ($this->source as $key => $item) {

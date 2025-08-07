@@ -10,6 +10,12 @@ final class Phipe
         private iterable $source
     ) {}
 
+    /**
+     * Initializes a new pipeline instance with the provided source.
+     * 
+     * @param iterable $source
+     * @return Phipe
+     */
     public static function from(iterable $source): self
     {
         return new self($source);
