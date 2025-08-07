@@ -196,20 +196,20 @@ trait Intermediate
 
     /**
      * Returns only the unique items of the source.
-     * If a field mapper is specified, the uniqueness is determined by the value of that function.
-     * Intermediate, lazy operation.
+     * If a value mapper is provided, the uniqueness is determined by the result of that function.
+     * Intermediate, lazy operation with a buffer.
      * 
-     * fieldMapper: fn ($item)
+     * valueMapper: fn ($item)
      * 
-     * @param null|callable $fieldMapper
+     * @param null|callable $valueMapper
      * @return Phipe
      */
-    public function distinct(?callable $fieldMapper = null): self
+    public function distinct(?callable $valueMapper = null): self
     {
-        $generator = function () use ($fieldMapper): Generator {
+        $generator = function () use ($valueMapper): Generator {
             $visited = [];
             foreach ($this->source as $key => $item) {
-                $current = $fieldMapper ? $fieldMapper($item) : $item;
+                $current = $valueMapper ? $valueMapper($item) : $item;
                 if (in_array($current, $visited)) continue;
                 $visited[] = $current;
                 yield $key => $item;

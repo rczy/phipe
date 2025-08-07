@@ -56,7 +56,7 @@ trait Terminal
 
     /**
      * Consumes the pipeline and returns the first item from it.
-     * Terminal operation.
+     * Short-circuiting terminal operation.
      * 
      * @return mixed
      */
@@ -81,5 +81,162 @@ trait Terminal
             $last = $item;
         }
         return $last;
+    }
+
+    /**
+     * Consumes the pipeline and returns the number of items.
+     * Terminal operation.
+     * 
+     * @return int
+     */
+    public function count(): int
+    {
+        $count = 0;
+        foreach ($this->source as $_) {
+            $count++;
+        }
+        return $count;
+    }
+
+    /**
+     * Consumes the pipeline and returns the minimum item.
+     * If a value mapper is provided, the minimum is determined by the result of that function.
+     * Terminal operation.
+     * 
+     * valueMapper: fn ($item)
+     * 
+     * @param null|callable $valueMapper
+     * @return mixed
+     */
+    public function min(?callable $valueMapper = null): mixed
+    {
+        $min = null;
+        $firstIteration = true;
+        foreach ($this->source as $item) {
+            $current = $valueMapper ? $valueMapper($item) : $item;
+            if ($firstIteration) {
+                $min = $current;
+                $firstIteration = false;
+                continue;
+            }
+            $min = $current < $min ? $current : $min;
+        }
+        return $min;
+    }
+
+    /**
+     * Consumes the pipeline and returns the maximum item.
+     * If a value mapper is provided, the maximum is determined by the result of that function.
+     * Terminal operation.
+     * 
+     * valueMapper: fn ($item)
+     * 
+     * @param null|callable $valueMapper
+     * @return mixed
+     */
+    public function max(?callable $valueMapper = null): mixed
+    {
+        $max = null;
+        $firstIteration = true;
+        foreach ($this->source as $item) {
+            $current = $valueMapper ? $valueMapper($item) : $item;
+            if ($firstIteration) {
+                $max = $current;
+                $firstIteration = false;
+                continue;
+            }
+            $max = $current > $max ? $current : $max;
+        }
+        return $max;
+    }
+
+    /**
+     * Consumes the pipeline and returns the sum of items.
+     * If a value mapper is provided, the sum is determined by the result of that function.
+     * Terminal operation.
+     * 
+     * valueMapper: fn ($item)
+     * 
+     * @param null|callable $valueMapper
+     * @return mixed
+     */
+    public function sum(?callable $valueMapper = null): mixed
+    {
+        $sum = null;
+        $firstIteration = true;
+        foreach ($this->source as $item) {
+            $current = $valueMapper ? $valueMapper($item) : $item;
+            if ($firstIteration) {
+                $sum = $current;
+                $firstIteration = false;
+                continue;
+            }
+            $sum += $current;
+        }
+        return $sum;
+    }
+
+    /**
+     * Consumes the pipeline and returns the average of items.
+     * If a value mapper is provided, the average is determined by the result of that function.
+     * Terminal operation.
+     * 
+     * valueMapper: fn ($item)
+     * 
+     * @param null|callable $valueMapper
+     * @return mixed
+     */
+    public function avg(?callable $valueMapper = null): mixed
+    {
+        $sum = null;
+        $count = 0;
+        $firstIteration = true;
+        foreach ($this->source as $item) {
+            $count++;
+            $current = $valueMapper ? $valueMapper($item) : $item;
+            if ($firstIteration) {
+                $sum = $current;
+                $firstIteration = false;
+                continue;
+            }
+            $sum += $current;
+        }
+        return $count ? $sum / $count : null;
+    }
+
+    /**
+     * Consumes the pipeline and returns the concatenated string representation of
+     * the items, with an optional separator between them.
+     * Terminal operation.
+     * 
+     * @param null|string $separator
+     * @return string
+     */
+    public function join(?string $separator = ""): string
+    {
+        $joined = "";
+        foreach ($this->source as $item) {
+            $joined .= $item . $separator;
+        }
+        return substr($joined, 0, -strlen($separator));
+    }
+
+    /**
+     * Consumes the pipeline and returns an associative array of the items, 
+     * where the keys are determined by a classifier function.
+     * Terminal operation.
+     * 
+     * classifier: fn ($item)
+     * 
+     * @param callable $classifier
+     * @return array
+     */
+    public function groupBy(callable $classifier): array
+    {
+        $grouped = [];
+        foreach ($this->source as $item) {
+            $grouped[$classifier($item)][] = $item;
+        }
+        return $grouped;
     }
 }

@@ -14,13 +14,6 @@ More pipeline operations are going to be added including, but not limited to:
 **Intermediate Operations**:
 
 **Terminal Operations**:
-- count
-- min
-- max
-- sum
-- average
-- join
-- groupBy
 
 **Short-Circuiting Terminal Operations**:
 - findFirst
