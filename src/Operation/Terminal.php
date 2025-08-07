@@ -53,4 +53,33 @@ trait Terminal
             $consumer($item, $key);
         }
     }
+
+    /**
+     * Consumes the pipeline and returns the first item from it.
+     * Terminal operation.
+     * 
+     * @return mixed
+     */
+    public function head(): mixed
+    {
+        foreach ($this->source as $item) {
+            return $item;
+        }
+        return null;
+    }
+
+    /**
+     * Consumes the pipeline and returns the last item from it.
+     * Terminal operation.
+     * 
+     * @return mixed
+     */
+    public function tail(): mixed
+    {
+        $last = null;
+        foreach ($this->source as $item) {
+            $last = $item;
+        }
+        return $last;
+    }
 }
