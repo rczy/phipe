@@ -239,4 +239,72 @@ trait Terminal
         }
         return $grouped;
     }
+
+    /**
+     * Consumes the pipeline and returns the first item which matches the predicate.
+     * Short-circuiting terminal operation.
+     * 
+     * predicate: fn ($item)
+     * 
+     * @param callable $predicate
+     * @return mixed
+     */
+    public function findFirst(callable $predicate): mixed
+    {
+        foreach ($this->source as $item) {
+            if ($predicate($item)) return $item;
+        }
+        return null;
+    }
+
+    /**
+     * Consumes the pipeline and returns true if any of the items matches the predicate.
+     * Short-circuiting terminal operation.
+     * 
+     * predicate: fn ($item)
+     * 
+     * @param callable $predicate
+     * @return bool
+     */
+    public function anyMatch(callable $predicate): bool
+    {
+        foreach ($this->source as $item) {
+            if ($predicate($item)) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Consumes the pipeline and returns true if all of the items match the predicate.
+     * Short-circuiting terminal operation.
+     * 
+     * predicate: fn ($item)
+     * 
+     * @param callable $predicate
+     * @return bool
+     */
+    public function allMatch(callable $predicate): bool
+    {
+        foreach ($this->source as $item) {
+            if (!$predicate($item)) return false;
+        }
+        return true;
+    }
+
+    /**
+     * Consumes the pipeline and returns true if none of the items matches the predicate.
+     * Short-circuiting terminal operation.
+     * 
+     * predicate: fn ($item)
+     * 
+     * @param callable $predicate
+     * @return bool
+     */
+    public function noneMatch(callable $predicate): bool
+    {
+        foreach ($this->source as $item) {
+            if ($predicate($item)) return false;
+        }
+        return true;
+    }
 }

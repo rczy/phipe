@@ -16,10 +16,6 @@ More pipeline operations are going to be added including, but not limited to:
 **Terminal Operations**:
 
 **Short-Circuiting Terminal Operations**:
-- findFirst
-- anyMatch
-- allMatch
-- noneMatch
 
 **Branching/Combining Operations**:
 - tee
