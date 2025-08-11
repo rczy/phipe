@@ -284,7 +284,7 @@ trait Intermediate
 
     /**
      * Shuffles the order of the items after consuming the source.
-     * Caution: does not preserve keys.
+     * Caution: Does not preserve keys.
      * Intermediate, eager operation.
      * 
      * @return Phipe

@@ -6,7 +6,6 @@ This package is currently worked on. The following features are planned:
 
 - Up to date README with examples.
 - Comprehensive tests.
-- Comments in source code.
 - Option to register custom stages for the pipeline.
 
 More pipeline operations are going to be added including, but not limited to:
@@ -18,7 +17,3 @@ More pipeline operations are going to be added including, but not limited to:
 **Short-Circuiting Terminal Operations**:
 
 **Branching/Combining Operations**:
-- tee
-- merge
-- append
-- zip
