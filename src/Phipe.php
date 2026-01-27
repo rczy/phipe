@@ -3,13 +3,12 @@ namespace Rczy\Phipe;
 
 use Generator;
 use NoRewindIterator;
-use RuntimeException;
 
 final class Phipe
 {
-    use Operation\Branching;
-    use Operation\Intermediate;
-    use Operation\Terminal;
+    use Operations\Branching;
+    use Operations\Intermediate;
+    use Operations\Terminal;
 
     private static array $extensions = [];
 
@@ -77,7 +76,7 @@ final class Phipe
     public function __call(string $name, array $args): mixed
     {
         if (!$function = static::$extensions[$name]) {
-            throw new RuntimeException(
+            throw new Exceptions\UnknownOperationException(
                 "'$name' operation is not found. Use the 'extend' static method on the Phipe class to add custom operations."
             );
         }

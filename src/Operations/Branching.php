@@ -1,5 +1,5 @@
 <?php
-namespace Rczy\Phipe\Operation;
+namespace Rczy\Phipe\Operations;
 
 use Generator;
 use Rczy\Phipe\Phipe;
@@ -19,7 +19,7 @@ trait Branching
      * Does not preserve keys.
      * 
      * @param int $branches
-     * @return array
+     * @return array<Phipe>
      */
     public function tee(int $branches = 2): array
     {
@@ -55,7 +55,7 @@ trait Branching
 
     /**
      * Appends one or more pipelines to the current pipeline.
-     * The new pipeline will consume items from the current pipeline first,
+     * The new resulting pipeline will consume items from the current pipeline first,
      * followed sequentially by the items from each appended pipeline.
      * 
      * Caution: Does not preserve keys.

@@ -1,5 +1,5 @@
 <?php
-namespace Rczy\Phipe\Operation;
+namespace Rczy\Phipe\Operations;
 
 use Generator;
 
@@ -135,8 +135,10 @@ trait Intermediate
     public function dropWhile(callable $predicate): self
     {
         $generator = function () use ($predicate): Generator {
+            $dropping = true;
             foreach ($this->source as $key => $item) {
-                if ($predicate($item)) continue;
+                if ($dropping && $predicate($item)) continue;
+                else $dropping = false;
                 yield $key => $item;
             }
         };

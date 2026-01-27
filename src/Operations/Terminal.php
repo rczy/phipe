@@ -1,5 +1,5 @@
 <?php
-namespace Rczy\Phipe\Operation;
+namespace Rczy\Phipe\Operations;
 
 trait Terminal
 {
@@ -52,35 +52,6 @@ trait Terminal
         foreach ($this->source as $key => $item) {
             $consumer($item, $key);
         }
-    }
-
-    /**
-     * Consumes the pipeline and returns the first item from it.
-     * Short-circuiting terminal operation.
-     * 
-     * @return mixed
-     */
-    public function head(): mixed
-    {
-        foreach ($this->source as $item) {
-            return $item;
-        }
-        return null;
-    }
-
-    /**
-     * Consumes the pipeline and returns the last item from it.
-     * Terminal operation.
-     * 
-     * @return mixed
-     */
-    public function tail(): mixed
-    {
-        $last = null;
-        foreach ($this->source as $item) {
-            $last = $item;
-        }
-        return $last;
     }
 
     /**
@@ -218,7 +189,9 @@ trait Terminal
         foreach ($this->source as $item) {
             $joined .= $item . $separator;
         }
-        return substr($joined, 0, -strlen($separator));
+        return (strlen($separator) > 0)
+            ? substr($joined, 0, -strlen($separator))
+            : $joined;
     }
 
     /**
@@ -242,6 +215,7 @@ trait Terminal
 
     /**
      * Consumes the pipeline and returns the first item which matches the predicate.
+     * If no predicate is provided then returns the first item.
      * Short-circuiting terminal operation.
      * 
      * predicate: fn ($item)
@@ -249,12 +223,36 @@ trait Terminal
      * @param callable $predicate
      * @return mixed
      */
-    public function findFirst(callable $predicate): mixed
+    public function first(?callable $predicate = null): mixed
     {
+        if ($predicate === null)
+            $predicate = fn () => true;
+
         foreach ($this->source as $item) {
             if ($predicate($item)) return $item;
         }
         return null;
+    }
+
+    /**
+     * Consumes the pipeline and returns the last item which matches the predicate.
+     * Terminal operation.
+     * 
+     * predicate: fn ($item)
+     * 
+     * @param callable $predicate
+     * @return mixed
+     */
+    public function last(?callable $predicate = null): mixed
+    {
+        if ($predicate === null)
+            $predicate = fn () => true;
+
+        $last = null;
+        foreach ($this->source as $item) {
+            if ($predicate($item)) $last = $item;
+        }
+        return $last;
     }
 
     /**
@@ -266,7 +264,7 @@ trait Terminal
      * @param callable $predicate
      * @return bool
      */
-    public function anyMatch(callable $predicate): bool
+    public function any(callable $predicate): bool
     {
         foreach ($this->source as $item) {
             if ($predicate($item)) return true;
@@ -283,7 +281,7 @@ trait Terminal
      * @param callable $predicate
      * @return bool
      */
-    public function allMatch(callable $predicate): bool
+    public function all(callable $predicate): bool
     {
         foreach ($this->source as $item) {
             if (!$predicate($item)) return false;
@@ -300,7 +298,7 @@ trait Terminal
      * @param callable $predicate
      * @return bool
      */
-    public function noneMatch(callable $predicate): bool
+    public function none(callable $predicate): bool
     {
         foreach ($this->source as $item) {
             if ($predicate($item)) return false;
