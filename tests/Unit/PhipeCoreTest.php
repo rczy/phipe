@@ -48,13 +48,47 @@ final class PhipeCoreTest extends TestCase
 
     public function testItExtendsPipelineWithCustomMethod(): void
     {
-    }
+        Phipe::extend("toJson", function () {
+            /** @var Phipe $this */
+            return json_encode($this->toArray());
+        });
 
-    public function testItPassesContextToExtendedMethod(): void
-    {
+        $data = [1, 2];
+
+        $result = Phipe::from($data)->toJson();
+
+        $this->assertSame(json_encode($data), $result);
     }
 
     public function testItAllowsChainingOfExtendedMethods(): void
     {
+        Phipe::extend("multiply", function (int $multiplier) {
+            $generator = function () use ($multiplier) {
+            /** @var Phipe $this */
+            foreach ($this->source as $item) {
+                    yield $item * $multiplier;
+                }
+            };
+            return new Phipe($generator());
+        });
+
+        Phipe::extend("divide", function (int $divisor) {
+            $generator = function () use ($divisor) {
+            /** @var Phipe $this */
+            foreach ($this->source as $item) {
+                    yield $item / $divisor;
+                }
+            };
+            return new Phipe($generator());
+        });
+
+        $data = [3, 6, 12];
+
+        $result = Phipe::from($data)
+            ->multiply(4)
+            ->divide(3)
+            ->toArray();
+
+        $this->assertSame([4, 8, 16], $result);
     }
 }

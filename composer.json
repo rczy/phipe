@@ -27,6 +27,6 @@
         ]
     },
     "scripts": {
-        "tests": "./vendor/bin/phpunit --testdox tests"
+        "tests": "./vendor/bin/phpunit --testdox --display-warnings tests"
     }
 }

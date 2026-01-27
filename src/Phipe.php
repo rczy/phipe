@@ -75,7 +75,7 @@ final class Phipe
      */
     public function __call(string $name, array $args): mixed
     {
-        if (!$function = static::$extensions[$name]) {
+        if (!$function = static::$extensions[$name] ?? null) {
             throw new Exceptions\UnknownOperationException(
                 "'$name' operation is not found. Use the 'extend' static method on the Phipe class to add custom operations."
             );
