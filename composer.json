@@ -1,9 +1,9 @@
 {
     "name": "rczy/phipe",
-    "description": "PHiPe: Lightweight data processing pipelines",
     "type": "library",
+    "description": "PHiPe: Lightweight data processing pipelines",
+    "keywords": ["pipeline", "data-processing"],
     "license": "MIT",
-    "version": "0.1",
     "authors": [
         {
             "name": "Bálint Bérczy"
